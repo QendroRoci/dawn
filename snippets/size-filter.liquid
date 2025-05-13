@@ -1,0 +1,92 @@
+{% comment %}
+  Size Filter Snippet for StyleMode Theme
+  Displays a visual size selector for filtering products by size
+{% endcomment %}
+
+{%- if filter.type == 'list' and filter.param_name contains 'size' or filter.param_name contains 'Size' -%}
+  <div class="size-filter">
+    <div class="size-filter__header">
+      <span class="size-filter__title">{{ filter.label }}</span>
+    </div>
+    <ul class="size-filter__options">
+      {%- for filter_value in filter.values -%}
+        <li class="size-filter__option">
+          <a href="{{ filter_value.url }}" class="size-filter__link{% if filter_value.active %} size-filter__link--active{% endif %}{% if filter_value.count == 0 %} size-filter__link--disabled{% endif %}">
+            <span class="size-filter__label">{{ filter_value.label }}</span>
+            <span class="size-filter__count">{{ filter_value.count }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- else -%}
+  <div class="facets__item">
+    <div class="facets__header">
+      <span class="facets__selected no-js-hidden">{{ filter.active_values.size }}</span>
+      <facet-remove>
+        <a href="{{ filter.url_to_remove }}" class="facets__reset link underlined-link" id="Filter-{{ filter.param_name }}-mobile-remove">
+          {{ 'filters.reset' | t }}
+        </a>
+      </facet-remove>
+      <details id="Details-{{ filter.param_name }}-mobile" class="disclosure-has-popup facets__disclosure">
+        <summary class="facets__summary caption-large focus-offset">
+          <div>
+            <span>{{ filter.label }}</span>
+            <span class="facets__selected no-js-hidden">{{ filter.active_values.size }}</span>
+          </div>
+          {% render 'icon-caret' %}
+        </summary>
+        <div id="Facet-{{ filter.param_name }}-mobile" class="facets__display">
+          <div class="facets__header">
+            <span class="facets__selected no-js-hidden">{{ filter.active_values.size }}</span>
+            <facet-remove>
+              <a href="{{ filter.url_to_remove }}" class="facets__reset link underlined-link" id="Filter-{{ filter.param_name }}-mobile-remove">
+                {{ 'filters.reset' | t }}
+              </a>
+            </facet-remove>
+          </div>
+
+          <ul class="facets__list list-unstyled" role="list">
+            {%- for filter_value in filter.values -%}
+              <li class="list-menu__item facets__item">
+                <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}" class="facet-checkbox{% if filter_value.active %} facet-checkbox--active{% endif %}{% if filter_value.count == 0 and filter_value.active == false %} facet-checkbox--disabled{% endif %}">
+                  <input type="checkbox"
+                    name="{{ filter_value.param_name }}"
+                    value="{{ filter_value.value }}"
+                    id="Filter-{{ filter.param_name }}-{{ forloop.index }}"
+                    {% if filter_value.active %}checked{% endif %}
+                    {% if filter_value.count == 0 and filter_value.active == false %}disabled{% endif %}
+                  >
+
+                  <span class="facet-checkbox__icon"></span>
+
+                  <svg class="icon icon-checkmark" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 9" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.35.643a.5.5 0 01.006.707l-6.77 6.886a.5.5 0 01-.719-.006L.638 4.845a.5.5 0 11.724-.69l2.872 3.011 6.41-6.517a.5.5 0 01.707-.006h-.001z" fill="currentColor"/>
+                  </svg>
+
+                  <span class="facet-checkbox__label">
+                    {{ filter_value.label }}
+                    {% if filter_value.count != 0 or filter_value.active %}
+                      <span class="facet-checkbox__count">({{ filter_value.count }})</span>
+                    {% endif %}
+                  </span>
+                </label>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          <div class="no-js-hidden facets__footer">
+            <facet-remove class="facets__reset">
+              <a href="{{ filter.url_to_remove }}" class="button button--tertiary">
+                {{ 'filters.reset' | t }}
+              </a>
+            </facet-remove>
+            <button type="button" class="no-js-hidden button button--primary" onclick="this.closest('.facets__disclosure').querySelector('.facets__summary').click()">
+              {{ 'filters.apply' | t }}
+            </button>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+{%- endif -%}

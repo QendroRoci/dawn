@@ -520,6 +520,9 @@
 
                   {% case filter.type %}
                     {% when 'boolean', 'list' %}
+                      {% if filter.param_name contains 'size' or filter.param_name contains 'Size' %}
+                      {% render 'size-filter-mobile', filter: filter, section_id: section.id, forloop_index: forloop.index %}
+                    {% else %}
                       <details
                         id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}"
                         class="mobile-facets__details js-filter"
@@ -662,6 +665,9 @@
                         </div>
                       </details>
                     {% when 'price_range' %}
+                      {% if filter.param_name contains 'size' or filter.param_name contains 'Size' %}
+                      {% render 'size-filter-mobile', filter: filter, section_id: section.id, forloop_index: forloop.index %}
+                    {% else %}
                       <details
                         id="Details-Mobile-{{ filter.param_name | escape }}-{{ section.id }}"
                         class="mobile-facets__details js-filter"

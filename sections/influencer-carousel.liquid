@@ -1,0 +1,320 @@
+{% comment %}
+  Influencer Carousel Section for StyleMode Theme
+  Displays a carousel of fashion influencers with their content and testimonials
+{% endcomment %}
+
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+{{ 'section-influencer-carousel.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="influencer-carousel page-width section-{{ section.id }}-padding">
+    {% if section.settings.title != blank %}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin">
+        <h2 class="title {{ section.settings.heading_size }}">
+          {{ section.settings.title | escape }}
+        </h2>
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <a href="{{ section.settings.button_link }}" class="button button--secondary">
+            {{ section.settings.button_label | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+    {% endif %}
+
+    <slider-component class="slider-mobile-gutter">
+      <ul class="influencer-carousel__grid grid grid--1-col{% if section.blocks.size > 1 %} grid--2-col-tablet grid--{{ section.settings.columns_desktop }}-col-desktop{% endif %}" 
+        id="Slider-{{ section.id }}"
+        role="list"
+      >
+        {%- for block in section.blocks -%}
+          <li class="influencer-carousel__item grid__item" {{ block.shopify_attributes }}>
+            <div class="influencer-card">
+              <div class="influencer-card__content">
+                {% if block.settings.image != blank %}
+                  <div class="influencer-card__image-wrapper">
+                    <img
+                      srcset="{%- if block.settings.image.width >= 550 -%}{{ block.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+                        {%- if block.settings.image.width >= 720 -%}{{ block.settings.image | image_url: width: 720 }} 720w,{%- endif -%}
+                        {{ block.settings.image | image_url }} {{ block.settings.image.width }}w"
+                      src="{{ block.settings.image | image_url: width: 550 }}"
+                      sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: section.settings.columns_desktop }}px, (min-width: 990px) calc((100vw - 130px) / {{ section.settings.columns_desktop }}), (min-width: 750px) calc((100vw - 120px) / 2), calc(100vw - 30px)"
+                      alt="{{ block.settings.image.alt | escape }}"
+                      height="{{ block.settings.image.height }}"
+                      width="{{ block.settings.image.width }}"
+                      loading="lazy"
+                      class="influencer-card__image"
+                    >
+                  </div>
+                {% endif %}
+                
+                <div class="influencer-card__info">
+                  {% if block.settings.name != blank %}
+                    <h3 class="influencer-card__name h3">{{ block.settings.name | escape }}</h3>
+                  {% endif %}
+                  
+                  {% if block.settings.handle != blank %}
+                    <div class="influencer-card__handle">@{{ block.settings.handle | escape }}</div>
+                  {% endif %}
+                  
+                  {% if block.settings.quote != blank %}
+                    <div class="influencer-card__quote rte">{{ block.settings.quote }}</div>
+                  {% endif %}
+                  
+                  {% if block.settings.social_links %}
+                    <div class="influencer-card__social">
+                      {% if block.settings.instagram_url != blank %}
+                        <a href="{{ block.settings.instagram_url }}" class="influencer-card__social-link" target="_blank" rel="noopener" aria-label="{{ 'general.social.instagram' | t }}">
+                          {% render 'icon-instagram' %}
+                        </a>
+                      {% endif %}
+                      
+                      {% if block.settings.tiktok_url != blank %}
+                        <a href="{{ block.settings.tiktok_url }}" class="influencer-card__social-link" target="_blank" rel="noopener" aria-label="{{ 'general.social.tiktok' | t }}">
+                          {% render 'icon-tiktok' %}
+                        </a>
+                      {% endif %}
+                      
+                      {% if block.settings.youtube_url != blank %}
+                        <a href="{{ block.settings.youtube_url }}" class="influencer-card__social-link" target="_blank" rel="noopener" aria-label="{{ 'general.social.youtube' | t }}">
+                          {% render 'icon-youtube' %}
+                        </a>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                  
+                  {% if block.settings.button_label != blank %}
+                    <a {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% endif %} class="button button--secondary">
+                      {{ block.settings.button_label | escape }}
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+      
+      {%- if section.blocks.size > 1 -%}
+        <div class="slider-buttons no-js-hidden">
+          <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'general.slider.previous_slide' | t }}">
+            {% render 'icon-caret' %}
+          </button>
+          <div class="slider-counter caption">
+            <span class="slider-counter--current">1</span>
+            <span aria-hidden="true"> / </span>
+            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+            <span class="slider-counter--total">{{ section.blocks.size }}</span>
+          </div>
+          <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'general.slider.next_slide' | t }}">
+            {% render 'icon-caret' %}
+          </button>
+        </div>
+      {%- endif -%}
+    </slider-component>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Influencer Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Featured Influencers",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "View all",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "influencer",
+      "name": "Influencer",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Influencer image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "default": "Influencer name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "handle",
+          "default": "influencer_handle",
+          "label": "Social media handle"
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "default": "<p>Share a testimonial or quote from this influencer about your brand or products.</p>",
+          "label": "Quote"
+        },
+        {
+          "type": "header",
+          "content": "Social links"
+        },
+        {
+          "type": "checkbox",
+          "id": "social_links",
+          "default": true,
+          "label": "Show social links"
+        },
+        {
+          "type": "url",
+          "id": "instagram_url",
+          "label": "Instagram"
+        },
+        {
+          "type": "url",
+          "id": "tiktok_url",
+          "label": "TikTok"
+        },
+        {
+          "type": "url",
+          "id": "youtube_url",
+          "label": "YouTube"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop collection",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Influencer Carousel",
+      "blocks": [
+        {
+          "type": "influencer"
+        },
+        {
+          "type": "influencer"
+        },
+        {
+          "type": "influencer"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

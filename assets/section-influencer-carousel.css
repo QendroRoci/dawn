@@ -1,0 +1,115 @@
+.influencer-carousel__grid {
+  row-gap: 3rem;
+}
+
+.influencer-card {
+  position: relative;
+  height: 100%;
+  border-radius: var(--card-corner-radius);
+  box-shadow: var(--shadow-horizontal-offset) var(--shadow-vertical-offset) var(--shadow-blur-radius) rgba(var(--color-shadow), var(--shadow-opacity));
+  overflow: hidden;
+  background-color: rgb(var(--color-background));
+  transition: transform 0.3s ease;
+}
+
+.influencer-card:hover {
+  transform: translateY(-5px);
+}
+
+.influencer-card__content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.influencer-card__image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.influencer-card__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.influencer-card:hover .influencer-card__image {
+  transform: scale(1.05);
+}
+
+.influencer-card__info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 2rem;
+}
+
+.influencer-card__name {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: calc(var(--font-heading-scale) * 1.8rem);
+}
+
+.influencer-card__handle {
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  color: rgba(var(--color-text), 0.7);
+}
+
+.influencer-card__quote {
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.influencer-card__social {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: auto;
+  margin-bottom: 2rem;
+}
+
+.influencer-card__social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: rgba(var(--color-button), 0.1);
+  border-radius: 50%;
+  color: rgb(var(--color-text));
+  transition: all 0.3s ease;
+}
+
+.influencer-card__social-link:hover {
+  background-color: rgb(var(--color-button));
+  color: rgb(var(--color-button-text));
+}
+
+.influencer-card__social-link svg {
+  width: 1.8rem;
+  height: 1.8rem;
+  fill: currentColor;
+}
+
+@media screen and (min-width: 750px) {
+  .influencer-card__name {
+    font-size: calc(var(--font-heading-scale) * 2rem);
+  }
+  
+  .influencer-card__handle {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .influencer-carousel__grid {
+    row-gap: 4rem;
+  }
+  
+  .influencer-card__name {
+    font-size: calc(var(--font-heading-scale) * 2.2rem);
+  }
+}
